@@ -1,0 +1,12 @@
+{
+  "name": "TimeManagement-ReactJs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Jonathan Acera Sadullo",
+  "license": "ISC",
+  "description": "A simple React.js application",
+}
