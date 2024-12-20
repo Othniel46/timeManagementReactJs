@@ -1,0 +1,21 @@
+{
+  "name": "TimeManagement-ReactJs",
+  "version": "1.0.0",
+  "main": "index.js",
+"scripts": {
+  "build": "react-scripts build"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Othniel46/timeManagementReactJs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Othniel46/timeManagementReactJs/issues"
+  },
+  "homepage": "https://github.com/Othniel46/timeManagementReactJs#readme",
+  "description": ""
+}
