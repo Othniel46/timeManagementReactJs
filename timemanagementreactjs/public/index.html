@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">    
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f9;
+      }
+      header {
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 1em 0;
+      }
+      main {
+        padding: 20px;
+        max-width: 800px;
+        margin: auto;
+      }
+      h1, h2 {
+        color: #333;
+      }
+      .task {
+        background: #fff;
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .task h3 {
+        margin: 0 0 10px;
+      }
+      .task p {
+        margin: 5px 0;
+      }
+      .task button {
+        padding: 10px 15px;
+        border: none;
+        background-color: #4CAF50;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      footer {
+        text-align: center;
+        padding: 1em 0;
+        background: #4CAF50;
+        color: white;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+      #searchBar {
+        margin-bottom: 20px;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .priority {
+        font-weight: bold;
+        color: #ff5722;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Time Management App</h1>
+      <p>Plan, Prioritize, and Succeed!</p>
+    </header>
+    <main>
+      <input type="text" id="searchBar" placeholder="Search tasks..." oninput="filterTasks()">
+      <h2>Your Tasks</h2>
+      <div id="taskList"></div>
+    
+      <h2>Add New Task</h2>
+      <form id="taskForm">
+        <label for="taskName">Task Name:</label>
+        <input type="text" id="taskName" placeholder="Enter task name" required>
+        <br><br>
+        <label for="taskDeadline">Deadline:</label>
+        <input type="date" id="taskDeadline" required>
+        <br><br>
+        <label for="priority">Priority:</label>
+        <select id="priority" required>
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+        <br><br>
+        <button type="submit">Add Task</button>
+      </form>
+    </main>    
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+    <div id="calendarContainer">
+      <h2>Calendar View</h2>
+      <div id="calendar"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
+    <script>
+      // Initialize the Calendar
+      const renderCalendar = () => {
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          events: loadCalendarEvents(),
+        });
+        calendar.render();
+      };
+    
+      // Convert tasks to calendar events
+      const loadCalendarEvents = () => {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        return tasks.map(task => ({
+          title: task.name,
+          start: task.deadline,
+          color: task.priority === 'High' ? '#ff5722' : task.priority === 'Medium' ? '#ffc107' : '#4CAF50',
+        }));
+      };
+    
+      // Update the calendar when tasks are added
+      form.addEventListener('submit', () => {
+        setTimeout(() => {
+          renderCalendar();
+        }, 100);
+      });
+    
+      // Initialize calendar
+      renderCalendar();
+    </script>    
+    <script>
+      // Notify user about today's tasks
+      const notifyTasks = () => {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        const today = moment().format('YYYY-MM-DD');
+        const todayTasks = tasks.filter(task => task.deadline === today);
+    
+        if (todayTasks.length > 0) {
+          alert(`You have ${todayTasks.length} task(s) due today:\n` + 
+            todayTasks.map(task => `- ${task.name}`).join('\n'));
+        }
+      };
+    
+      // Check for notifications on page load
+      window.onload = () => {
+        notifyTasks();
+      };
+    </script>    
+    <button class="delete-btn"><i class="fas fa-trash-alt"></i>Delete</button>
+    <footer>
+      <p>© 2024 Time Management App | All Rights Reserved</p>
+    </footer>
+    <script>
+      const form = document.getElementById('taskForm');
+      const taskList = document.getElementById('taskList');
+      const searchBar = document.getElementById('searchBar');
+    
+      // Load tasks from localStorage
+      const loadTasks = () => {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        taskList.innerHTML = '';
+        tasks.forEach(task => displayTask(task));
+      };
+    
+      // Save tasks to localStorage
+      const saveTasks = tasks => {
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+      };
+    
+      // Add task
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const taskName = document.getElementById('taskName').value;
+        const taskDeadline = document.getElementById('taskDeadline').value;
+        const priority = document.getElementById('priority').value;
+    
+        const newTask = { name: taskName, deadline: taskDeadline, priority: priority };
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.push(newTask);
+        saveTasks(tasks);
+    
+        displayTask(newTask);
+        form.reset();
+      });
+    
+      // Display task
+      const displayTask = task => {
+        const taskDiv = document.createElement('div');
+        taskDiv.classList.add('task');
+        taskDiv.innerHTML = `
+          <h3>Task: ${task.name}</h3>
+          <p>Deadline: ${task.deadline}</p>
+          <p class="priority">Priority: ${task.priority}</p>
+          <button onclick="deleteTask('${task.name}')">Delete</button>
+        `;
+        taskList.appendChild(taskDiv);
+      };
+    
+      // Delete task
+      const deleteTask = taskName => {
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks = tasks.filter(task => task.name !== taskName);
+        saveTasks(tasks);
+        loadTasks();
+      };
+    
+      // Filter tasks
+      const filterTasks = () => {
+        const searchText = searchBar.value.toLowerCase();
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        taskList.innerHTML = '';
+        tasks
+          .filter(task => task.name.toLowerCase().includes(searchText))
+          .forEach(task => displayTask(task));
+      };
+    
+      // Initialize
+      loadTasks();
+    </script>
+  </body>
+</html>
